@@ -13,5 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::post('/login', 'Auth\LoginController@login');
+
 Route::group(['middleware' => 'auth:api'], function() {
 });
