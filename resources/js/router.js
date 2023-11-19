@@ -10,6 +10,12 @@ import DataOutlet from './pages/outlets/Outlet.vue'
 import AddOutlet from './pages/outlets/Add.vue'
 import EditOutlet from './pages/outlets/Edit.vue'
 
+import AddCouriers from './pages/couriers/Add.vue'
+import IndexCouriers from './pages/couriers/Index.vue'
+import DataCouriers from './pages/couriers/Courier.vue'
+import EditCouriers from './pages/couriers/Edit.vue'
+
+
 Vue.use(Router)
 
 //DEFINE ROUTE
@@ -30,6 +36,7 @@ const router = new Router({
         {
           path: '/outlets',
           component: IndexOutlet,
+          meta: { requiresAuth: true },
           children: [
               {
                   path: '',
@@ -50,7 +57,32 @@ const router = new Router({
                   meta: { title: 'Edit Outlet' }
               }
           ]
-      }
+        },
+        {
+            path: '/couriers',
+            component: IndexCouriers,
+            meta: { requiresAuth: true },
+            children: [
+                {
+                    path: '',
+                    name: 'couriers.data',
+                    component: DataCouriers,
+                    meta: { title: 'Manage Couriers' }
+                },
+                {
+                    path: 'add',
+                    name: 'couriers.add',
+                    component: AddCouriers,
+                    meta: { title: 'Add New Courier' }
+                },
+                {
+                    path: 'edit/:id',
+                    name: 'couriers.edit',
+                    component: EditCouriers,
+                    meta: { title: 'Edit Courier' }
+                },
+            ]
+        }
     ]
 });
 
