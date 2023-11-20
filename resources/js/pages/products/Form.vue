@@ -104,7 +104,7 @@ export default {
       }
   },
   methods: {
-      ...mapActions('product', ['getLaundryType', 'addLaundryType', 'addProductLaundry', 'editProduct', 'updateCourier']), //ME-LOAD SEMUA FUNGSI YANG ADA DI MODULE PRODUCT
+      ...mapActions('product', ['getLaundryType', 'addLaundryType', 'addProductLaundry', 'editProduct', 'updateProduct']), //ME-LOAD SEMUA FUNGSI YANG ADA DI MODULE PRODUCT
       formatToRupiah(value) {
         return value.toLocaleString('id-ID');
       },
@@ -147,7 +147,7 @@ export default {
               //MAKA ID AKAN DI TAMBAHKAN KE DALAM OBJECT VARIABLE PRODUCT
               Object.assign(this.product, { id: this.$route.params.id })
               //KIRIM PERMINTAAN KE SERVER UNTUK MENGUBAH DATA
-              this.updateCourier(this.product).then(() => {
+              this.updateProduct(this.product).then(() => {
                   //KOSONGKAN VARIABLE
                   this.product = {
                       name: '',

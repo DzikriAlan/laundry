@@ -83,7 +83,7 @@ const actions = {
             })
         })
     },
-    updateCourier({ commit }, payload) {
+    updateProduct({ commit }, payload) {
         return new Promise((resolve, reject) => {
             //MENGIRIM REQUEST UNTUK MENGUBAH DATA PRODUCT BERDASARKAN ID
             $axios.put(`/product/${payload.id}`, payload)
