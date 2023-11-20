@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 //IMPORT MODULE SECTION
+import user from './stores/user.js'
 import auth from './stores/auth.js'
 import outlet from './stores/outlet.js'
 import courier from './stores/courier.js'
@@ -13,6 +14,7 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
     //SEMUA MODULE YANG DIBUAT AKAN DITEPATKAN DIDALAM BAGIAN INI DAN DIPISAHKAN DENGAN KOMA UNTUK SETIAP MODULE-NYA
     modules: {
+        user,
         auth,
         outlet,
         courier,
@@ -30,7 +32,7 @@ const store = new Vuex.Store({
         //STATE token.
         isAuth: state => {
             return state.token != "null" && state.token != null
-        }
+        },
     },
     mutations: {
         //SEBUAH MUTATIONS YANG BERFUNGSI UNTUK MEMANIPULASI VALUE DARI STATE token

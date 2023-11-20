@@ -42,29 +42,30 @@
 <script>
 import { mapActions, mapMutations, mapGetters, mapState } from 'vuex';
 export default {
-  data() {
-      return {
-          data: {
-              email: '',
-              password: '',
-              remember_me: false
-          }
-      }
-  },
-  //SEBELUM COMPONENT DI-RENDER
-  created() {
-      //KITA MELAKUKAN PENGECEKAN JIKA SUDAH LOGIN DIMANA VALUE isAuth BERNILAI TRUE
-      if (this.isAuth) {
-          //MAKA DI-DIRECT KE ROUTE DENGAN NAME home
-          this.$router.push({ name: 'home' })
-      }
-  },
-  computed: {
+    data() {
+        return {
+            data: {
+                email: '',
+                password: '',
+                remember_me: false
+            }
+        }
+    },
+    //SEBELUM COMPONENT DI-RENDER
+    created() {
+        //KITA MELAKUKAN PENGECEKAN JIKA SUDAH LOGIN DIMANA VALUE isAuth BERNILAI TRUE
+        if (this.isAuth) {
+            //MAKA DI-DIRECT KE ROUTE DENGAN NAME home
+            this.$router.push({ name: 'home' })
+        }
+    },
+    computed: {
       ...mapGetters(['isAuth']), //MENGAMBIL GETTERS isAuth DARI VUEX
       ...mapState(['errors'])
-  },
-  methods: {
+    },
+    methods: {
       ...mapActions('auth', ['submit']), //MENGISIASI FUNGSI submit() DARI VUEX AGAR DAPAT DIGUNAKAN PADA COMPONENT TERKAIT. submit() BERASAL DARI ACTION PADA FOLDER STORES/auth.js
+      ...mapActions('user', ['getUserLogin']), 
       ...mapMutations(['CLEAR_ERRORS']),
     
       //KETIKA TOMBOL LOGIN DITEKAN, MAKA AKAN MEMINCU METHODS postLogin()
@@ -80,6 +81,9 @@ export default {
               }
           })
       }
-  }
+    },
+    destroyed() {
+        this.getUserLogin()
+    }
 }
 </script>
