@@ -2916,6 +2916,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2987,6 +2990,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])('expenses', ['getExpenses', 'removeExpenses']), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])('user', ['getUserLogin', 'middlewareRouter']), {
+    formatToRupiah: function formatToRupiah(value) {
+      return value.toLocaleString('id-ID');
+    },
     filterFields: function filterFields() {
       var Permission = this.authenticated.permission;
 
@@ -3061,6 +3067,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'FormExpenses',
@@ -3091,9 +3102,28 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     };
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])(['errors'])),
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])(['errors']), {
+    //MENGAMBIL STATE ERROR
+    formattedRupiah: {
+      get: function get() {
+        return this.formatToRupiah(this.expenses.price);
+      },
+      set: function set(value) {
+        this.expenses.price = this.formatToNumber(value);
+      }
+    }
+  }),
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])('expenses', ['submitExpense', 'editExpenses', 'updateExpenses']), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])('notification', ['getNotifications']), {
     //DEFINISIKAN FUNGSI UNTUK READ NOTIF
+    formatToRupiah: function formatToRupiah(value) {
+      return value.toLocaleString('id-ID');
+    },
+    formatToNumber: function formatToNumber(value) {
+      return Number(value.replace(/[^\d]/g, '')) || 0;
+    },
+    updateRealValue: function updateRealValue(event) {
+      this.expenses.price = this.formatToNumber(event.target.value);
+    },
     submit: function submit() {
       var _this2 = this;
 
@@ -65378,6 +65408,18 @@ var render = function() {
             },
             scopedSlots: _vm._u([
               {
+                key: "price",
+                fn: function(row) {
+                  return [
+                    _vm._v(
+                      "\n                    Rp." +
+                        _vm._s(_vm.formatToRupiah(row.item.price)) +
+                        "\n                "
+                    )
+                  ]
+                }
+              },
+              {
                 key: "status",
                 fn: function(row) {
                   return [
@@ -65596,20 +65638,23 @@ var render = function() {
             {
               name: "model",
               rawName: "v-model",
-              value: _vm.expenses.price,
-              expression: "expenses.price"
+              value: _vm.formattedRupiah,
+              expression: "formattedRupiah"
             }
           ],
           staticClass: "form-control",
           attrs: { type: "number" },
-          domProps: { value: _vm.expenses.price },
+          domProps: { value: _vm.formattedRupiah },
           on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.$set(_vm.expenses, "price", $event.target.value)
-            }
+            input: [
+              function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.formattedRupiah = $event.target.value
+              },
+              _vm.updateRealValue
+            ]
           }
         }),
         _vm._v(" "),

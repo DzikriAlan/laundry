@@ -11,6 +11,9 @@
               
               	<!-- TABLE INI AKAN MENAMPILKAN DATA EXPENSES -->
                 <b-table striped hover bordered :items="expenses.data" :fields="fields" show-empty>
+                    <template slot="price" slot-scope="row">
+                        Rp.{{ formatToRupiah(row.item.price) }}
+                    </template>
                     <template slot="status" slot-scope="row">
                         <span class="label label-success" v-if="row.item.status == 1">Diterima</span>
                         <span class="label label-warning" v-else-if="row.item.status == 0">Diproses</span>
@@ -110,6 +113,9 @@ export default {
     methods: {
         ...mapActions('expenses', ['getExpenses', 'removeExpenses']), //DEFINISIKAN ACTIONS DARI MODULE EXPENSES
         ...mapActions('user', ['getUserLogin', 'middlewareRouter']), 
+        formatToRupiah(value) {
+            return value.toLocaleString('id-ID');
+        },
         filterFields(){
             let Permission = this.authenticated.permission
 

@@ -7,7 +7,12 @@
         </div>
         <div class="form-group" :class="{ 'has-error': errors.price }">
             <label for="">Biaya</label>
-            <input type="number" class="form-control" v-model="expenses.price">
+            <input
+                type="number"
+                class="form-control"
+                v-model="formattedRupiah"
+                @input="updateRealValue"
+            />
             <p class="text-danger" v-if="errors.price">{{ errors.price[0] }}</p>
         </div>
         <div class="form-group" :class="{ 'has-error': errors.note }">
@@ -48,12 +53,30 @@ export default {
         }
     },
     computed: {
-        ...mapState(['errors']) //MENGAMBIL STATE ERROR
+        ...mapState(['errors']), //MENGAMBIL STATE ERROR
+        formattedRupiah: {
+            get() {
+                return this.formatToRupiah(this.expenses.price);
+            },
+            set(value) {
+                this.expenses.price = this.formatToNumber(value);
+            },
+        }
+
     },
     methods: {
         //MENDEFINISIKAN ACTION DARI MODULE EXPENSES VUEX
         ...mapActions('expenses', ['submitExpense', 'editExpenses', 'updateExpenses']),
         ...mapActions('notification', ['getNotifications']), //DEFINISIKAN FUNGSI UNTUK READ NOTIF
+        formatToRupiah(value) {
+            return value.toLocaleString('id-ID');
+        },
+        formatToNumber(value) {
+            return Number(value.replace(/[^\d]/g, '')) || 0;
+        },
+        updateRealValue(event) {
+            this.expenses.price = this.formatToNumber(event.target.value);
+        },
         submit() {
             //KETIKA FUNGSI INI BERJALAN (NOTE: DI PICU DARI FILE ADD TADI)
             //DI CEK DARI HALAMAN MANA
