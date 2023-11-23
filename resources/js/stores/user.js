@@ -125,15 +125,6 @@ const actions = {
             })
         })
     },
-    middlewareRouter({ state, dispatch }, payload){
-        dispatch('getUserLogin').then(() => {
-            let Permission = state.authenticated.permission
-
-            if (typeof Permission != 'undefined') {
-                return Permission.includes(payload)
-            }
-        })
-    }
 }
 
 export default {

@@ -48,12 +48,9 @@ export default {
   created() {
       //SEBELUM COMPONENT DI-LOAD, REQUEST DATA DARI SERVER
       this.getOutlets()
-      this.middlewareRouter('edit outlets').then((res) => {
-        if (res){
-            this.fields.push({ key: 'actions', label: 'Aksi' });
-        }
+      this.getUserLogin().then(() => {
+        this.filterFields()
       })
-
   },
   data() {
       return {
@@ -103,7 +100,17 @@ export default {
   methods: {
       //MENGAMBIL FUNGSI DARI VUEX MODULE outlet
       ...mapActions('outlet', ['getOutlets', 'removeOutlet']),
-      ...mapActions('user', ['middlewareRouter']), 
+      ...mapActions('user', ['getUserLogin', 'middlewareRouter']), 
+      filterFields(){
+        let Permission = this.authenticated.permission
+
+        if (typeof Permission != 'undefined') {
+            let acc = Permission.includes('edit outlets') ? true : false;
+            if (acc) {
+                this.fields.push({ key: 'actions', label: 'Aksi' });
+            }
+        }
+      },
       //KETIKA TOMBOL HAPUS DICLICK, MAKA AKAN MENJALANKAN METHOD INI
       deleteOutlet(id) {
           //AKAN MENAMPILKAN JENDELA KONFIRMASI

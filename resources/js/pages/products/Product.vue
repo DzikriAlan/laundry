@@ -52,12 +52,10 @@ import Permission from '../../mixins/Permission.js'
 export default {
   name: 'DataCourier',
   created() {
-      this.getProducts() //MELAKUKAN REQUEST KETIKA COMPONENT DI-LOAD
-      this.middlewareRouter('edit products').then((res) => {
-        if (res){
-            this.fields.push({ key: 'actions', label: 'Aksi' });
-        }
-      })
+    this.getProducts() //MELAKUKAN REQUEST KETIKA COMPONENT DI-LOAD
+    this.getUserLogin().then(() => {
+        this.filterFields();
+    })
   },
   data() {
       return {
@@ -77,6 +75,9 @@ export default {
       //ME-LOAD STATE DARI MODULE PRODUCTS
       ...mapState('product', {
           products: state => state.products, //STATE PRODUCTS
+      }),
+      ...mapState('user', {
+          authenticated: state => state.authenticated //STATE DATA USER YANG LOGIN
       }),
 
       page: {
@@ -100,7 +101,18 @@ export default {
   },
   methods: {
     ...mapActions('product', ['getProducts', 'removeProduct']), //LOAD ACTIONS DARI MODULE PRODUCT
-    ...mapActions('user', ['middlewareRouter']), 
+    ...mapActions('user', ['getUserLogin', 'middlewareRouter']), 
+        filterFields(){
+            let Permission = this.authenticated.permission
+
+            if (typeof Permission != 'undefined') {
+                let acc = Permission.includes('edit products') ? true : false;
+                if (acc) {
+                    this.fields.push({ key: 'actions', label: 'Aksi' });
+                }
+            }
+        },
+
       formatToRupiah(value) {
         return value.toLocaleString('id-ID');
       },

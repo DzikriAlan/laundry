@@ -54,10 +54,8 @@ export default {
     name: 'DataCourier',
     created() {
         this.getCouriers() //KETIKA PAGE DI-LOAD, FUNGSI UNTUK MENGAMBIL DATA DIJALANKAN
-        this.middlewareRouter('edit couriers').then((res) => {
-            if (res){
-                this.fields.push({ key: 'actions', label: 'Aksi' });
-            }
+        this.getUserLogin().then(() => {
+            this.filterFields();
         })
     },
     data() {
@@ -75,6 +73,9 @@ export default {
     computed: {
         ...mapState('courier', {
             couriers: state => state.couriers //STATE YANG MENYIMPAN DATA KURIR
+        }),
+        ...mapState('user', {
+            authenticated: state => state.authenticated //STATE DATA USER YANG LOGIN
         }),
         //STATE PAGE UNTUK MENGAMBIL DAN MENGUBAH DATA STATE
         page: {
@@ -98,8 +99,18 @@ export default {
     },
     methods: {
         ...mapActions('courier', ['getCouriers', 'removeCourier']), //MEMANGGIL FUNGSI YANG ADA DI STORE COURIER
-        ...mapActions('user', ['middlewareRouter']),
-        
+        ...mapActions('user', ['getUserLogin', 'middlewareRouter']), 
+        filterFields(){
+            let Permission = this.authenticated.permission
+
+            if (typeof Permission != 'undefined') {
+                let acc = Permission.includes('edit couriers') ? true : false;
+                if (acc) {
+                    this.fields.push({ key: 'actions', label: 'Aksi' });
+                }
+            }
+        },
+   
         //FUNGSI DELETE YANG AKAN DIBAHAS NANTINYA
         deleteCourier(id) {
             this.$swal({

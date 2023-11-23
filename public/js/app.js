@@ -2431,13 +2431,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
     this.getCouriers(); //KETIKA PAGE DI-LOAD, FUNGSI UNTUK MENGAMBIL DATA DIJALANKAN
 
-    this.middlewareRouter('edit couriers').then(function (res) {
-      if (res) {
-        _this.fields.push({
-          key: 'actions',
-          label: 'Aksi'
-        });
-      }
+    this.getUserLogin().then(function () {
+      _this.filterFields();
     });
   },
   data: function data() {
@@ -2464,6 +2459,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return state.couriers;
     } //STATE YANG MENYIMPAN DATA KURIR
 
+  }), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])('user', {
+    authenticated: function authenticated(state) {
+      return state.authenticated;
+    } //STATE DATA USER YANG LOGIN
+
   }), {
     //STATE PAGE UNTUK MENGAMBIL DAN MENGUBAH DATA STATE
     page: {
@@ -2485,7 +2485,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.getCouriers(this.search); //FUNGSI INI DIJALANKAN
     }
   },
-  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])('courier', ['getCouriers', 'removeCourier']), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])('user', ['middlewareRouter']), {
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])('courier', ['getCouriers', 'removeCourier']), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])('user', ['getUserLogin', 'middlewareRouter']), {
+    filterFields: function filterFields() {
+      var Permission = this.authenticated.permission;
+
+      if (typeof Permission != 'undefined') {
+        var acc = Permission.includes('edit couriers') ? true : false;
+
+        if (acc) {
+          this.fields.push({
+            key: 'actions',
+            label: 'Aksi'
+          });
+        }
+      }
+    },
     //FUNGSI DELETE YANG AKAN DIBAHAS NANTINYA
     deleteCourier: function deleteCourier(id) {
       var _this2 = this;
@@ -2911,13 +2925,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
     this.getExpenses(); //KETIKA HALAMAN DI-LOAD MAKA FUNGSI INI AKAN DIJALANKAN
 
-    this.middlewareRouter('edit expenses').then(function (res) {
-      if (res) {
-        _this.fields.push({
-          key: 'actions',
-          label: 'Aksi'
-        });
-      }
+    this.getUserLogin().then(function () {
+      _this.filterFields();
     });
   },
   data: function data() {
@@ -2951,6 +2960,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return state.expenses;
     } //AMBIL STATE DARI MODULE EXPENSES YANG AKAN DIBUAT KEMUDIAN
 
+  }), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])('user', {
+    authenticated: function authenticated(state) {
+      return state.authenticated;
+    } //STATE DATA USER YANG LOGIN
+
   }), {
     //AMBIL DAN MODIFIKASI STATE PAGE JIKA TERJADI PERUBAHAN
     page: {
@@ -2972,7 +2986,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.getExpenses(this.search); //MAKA JALANKAN FUNGSI INI DGN MENGIRIMKAN VALUE DARI SEARCH
     }
   },
-  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])('expenses', ['getExpenses', 'removeExpenses']), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])('user', ['middlewareRouter']), {
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])('expenses', ['getExpenses', 'removeExpenses']), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])('user', ['getUserLogin', 'middlewareRouter']), {
+    filterFields: function filterFields() {
+      var Permission = this.authenticated.permission;
+
+      if (typeof Permission != 'undefined') {
+        var acc = Permission.includes('edit expenses') ? true : false;
+
+        if (acc) {
+          this.fields.push({
+            key: 'actions',
+            label: 'Aksi'
+          });
+        }
+      }
+    },
     //FUNGSI INI SAMA DENGAN MODULE SEBELUMNYA UNTUK MENAMPILKAN ALERT KETIKA MENGHAPUS DATA
     deleteExpenses: function deleteExpenses(id) {
       var _this2 = this;
@@ -3603,13 +3631,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
     //SEBELUM COMPONENT DI-LOAD, REQUEST DATA DARI SERVER
     this.getOutlets();
-    this.middlewareRouter('edit outlets').then(function (res) {
-      if (res) {
-        _this.fields.push({
-          key: 'actions',
-          label: 'Aksi'
-        });
-      }
+    this.getUserLogin().then(function () {
+      _this.filterFields();
     });
   },
   data: function data() {
@@ -3667,7 +3690,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.getOutlets(this.search);
     }
   },
-  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])('outlet', ['getOutlets', 'removeOutlet']), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])('user', ['middlewareRouter']), {
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])('outlet', ['getOutlets', 'removeOutlet']), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])('user', ['getUserLogin', 'middlewareRouter']), {
+    filterFields: function filterFields() {
+      var Permission = this.authenticated.permission;
+
+      if (typeof Permission != 'undefined') {
+        var acc = Permission.includes('edit outlets') ? true : false;
+
+        if (acc) {
+          this.fields.push({
+            key: 'actions',
+            label: 'Aksi'
+          });
+        }
+      }
+    },
     //KETIKA TOMBOL HAPUS DICLICK, MAKA AKAN MENJALANKAN METHOD INI
     deleteOutlet: function deleteOutlet(id) {
       var _this2 = this;
@@ -4096,13 +4133,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
     this.getProducts(); //MELAKUKAN REQUEST KETIKA COMPONENT DI-LOAD
 
-    this.middlewareRouter('edit products').then(function (res) {
-      if (res) {
-        _this.fields.push({
-          key: 'actions',
-          label: 'Aksi'
-        });
-      }
+    this.getUserLogin().then(function () {
+      _this.filterFields();
     });
   },
   data: function data() {
@@ -4133,6 +4165,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return state.products;
     } //STATE PRODUCTS
 
+  }), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])('user', {
+    authenticated: function authenticated(state) {
+      return state.authenticated;
+    } //STATE DATA USER YANG LOGIN
+
   }), {
     page: {
       get: function get() {
@@ -4153,7 +4190,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.getProducts(this.search); //AMBIL DATA TERBARU BERDASARKAN VALUE SEARC
     }
   },
-  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])('product', ['getProducts', 'removeProduct']), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])('user', ['middlewareRouter']), {
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])('product', ['getProducts', 'removeProduct']), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])('user', ['getUserLogin', 'middlewareRouter']), {
+    filterFields: function filterFields() {
+      var Permission = this.authenticated.permission;
+
+      if (typeof Permission != 'undefined') {
+        var acc = Permission.includes('edit products') ? true : false;
+
+        if (acc) {
+          this.fields.push({
+            key: 'actions',
+            label: 'Aksi'
+          });
+        }
+      }
+    },
     formatToRupiah: function formatToRupiah(value) {
       return value.toLocaleString('id-ID');
     },
@@ -65388,19 +65439,21 @@ var render = function() {
                         )
                       : _vm._e(),
                     _vm._v(" "),
-                    _c(
-                      "router-link",
-                      {
-                        staticClass: "btn btn-info btn-sm",
-                        attrs: {
-                          to: {
-                            name: "expenses.view",
-                            params: { id: row.item.id }
-                          }
-                        }
-                      },
-                      [_c("i", { staticClass: "fa fa-eye" })]
-                    ),
+                    _vm.$can("view expenses")
+                      ? _c(
+                          "router-link",
+                          {
+                            staticClass: "btn btn-info btn-sm",
+                            attrs: {
+                              to: {
+                                name: "expenses.view",
+                                params: { id: row.item.id }
+                              }
+                            }
+                          },
+                          [_c("i", { staticClass: "fa fa-eye" })]
+                        )
+                      : _vm._e(),
                     _vm._v(" "),
                     row.item.status == 0
                       ? _c(
@@ -86653,17 +86706,6 @@ var actions = {
         commit('ASSIGN_USER_AUTH', response.data.data);
         resolve(response.data);
       });
-    });
-  },
-  middlewareRouter: function middlewareRouter(_ref8, payload) {
-    var state = _ref8.state,
-        dispatch = _ref8.dispatch;
-    dispatch('getUserLogin').then(function () {
-      var Permission = state.authenticated.permission;
-
-      if (typeof Permission != 'undefined') {
-        return Permission.includes(payload);
-      }
     });
   }
 };

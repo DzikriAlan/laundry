@@ -24,7 +24,7 @@
                     </template>
                     <template slot="actions" slot-scope="row">
                         <router-link :to="{ name: 'expenses.edit', params: {id: row.item.id} }" class="btn btn-warning btn-sm" v-if="row.item.status == 0"><i class="fa fa-pencil"></i></router-link>
-                        <router-link :to="{ name: 'expenses.view', params: {id: row.item.id} }" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></router-link>
+                        <router-link v-if="$can('view expenses')" :to="{ name: 'expenses.view', params: {id: row.item.id} }" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></router-link>
                         <button class="btn btn-danger btn-sm" @click="deleteExpenses(row.item.id)" v-if="row.item.status == 0"><i class="fa fa-trash"></i></button>
                     </template>
                 </b-table>
@@ -61,10 +61,8 @@ export default {
     name: 'DataExpenses',
     created() {
         this.getExpenses() //KETIKA HALAMAN DI-LOAD MAKA FUNGSI INI AKAN DIJALANKAN
-        this.middlewareRouter('edit expenses').then((res) => {
-            if (res){
-                this.fields.push({ key: 'actions', label: 'Aksi' });
-            }
+        this.getUserLogin().then(() => {
+            this.filterFields();
         })
     },
     data() {
@@ -85,6 +83,10 @@ export default {
         ...mapState('expenses', {
             expenses: state => state.expenses //AMBIL STATE DARI MODULE EXPENSES YANG AKAN DIBUAT KEMUDIAN
         }),
+        ...mapState('user', {
+            authenticated: state => state.authenticated //STATE DATA USER YANG LOGIN
+        }),
+
         //AMBIL DAN MODIFIKASI STATE PAGE JIKA TERJADI PERUBAHAN
         page: {
             get() {
@@ -107,7 +109,18 @@ export default {
     },
     methods: {
         ...mapActions('expenses', ['getExpenses', 'removeExpenses']), //DEFINISIKAN ACTIONS DARI MODULE EXPENSES
-        ...mapActions('user', ['middlewareRouter']), 
+        ...mapActions('user', ['getUserLogin', 'middlewareRouter']), 
+        filterFields(){
+            let Permission = this.authenticated.permission
+
+            if (typeof Permission != 'undefined') {
+                let acc = Permission.includes('edit expenses') ? true : false;
+                if (acc) {
+                    this.fields.push({ key: 'actions', label: 'Aksi' });
+                }
+            }
+        },
+
         //FUNGSI INI SAMA DENGAN MODULE SEBELUMNYA UNTUK MENAMPILKAN ALERT KETIKA MENGHAPUS DATA
         deleteExpenses(id) {
             this.$swal({
