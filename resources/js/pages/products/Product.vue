@@ -2,7 +2,7 @@
   <div class="col-md-12">
       <div class="panel">
           <div class="panel-heading">
-              <router-link :to="{ name: 'products.add' }" class="btn btn-primary btn-sm btn-flat">Tambah</router-link>
+              <router-link v-if="$can('create products')" :to="{ name: 'products.add' }" class="btn btn-primary btn-sm btn-flat">Tambah</router-link>
               <div class="pull-right">
                   <input type="text" class="form-control" placeholder="Cari..." v-model="search">
               </div>
@@ -47,11 +47,17 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import Permission from '../../mixins/Permission.js'
 
 export default {
   name: 'DataCourier',
   created() {
       this.getProducts() //MELAKUKAN REQUEST KETIKA COMPONENT DI-LOAD
+      this.middlewareRouter('edit products').then((res) => {
+        if (res){
+            this.fields.push({ key: 'actions', label: 'Aksi' });
+        }
+      })
   },
   data() {
       return {
@@ -62,7 +68,6 @@ export default {
               { key: 'laundry_type', label: 'Jenis Jasa' },
               { key: 'price', label: 'Harga' },
               { key: 'user_id', label: 'Admin' },
-              { key: 'actions', label: 'Aksi' }
           ],
           //VARIABLE UNTUK FORM SEARCH
           search: ''
@@ -95,6 +100,7 @@ export default {
   },
   methods: {
     ...mapActions('product', ['getProducts', 'removeProduct']), //LOAD ACTIONS DARI MODULE PRODUCT
+    ...mapActions('user', ['middlewareRouter']), 
       formatToRupiah(value) {
         return value.toLocaleString('id-ID');
       },
@@ -114,6 +120,7 @@ export default {
               }
           })
       }
-  }
+  },
+    mixins: [Permission],
 }
 </script>

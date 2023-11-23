@@ -2,7 +2,7 @@
   <div class="col-md-12">
       <div class="panel">
           <div class="panel-heading">
-              <router-link :to="{ name: 'outlets.add' }" class="btn btn-primary btn-sm btn-flat">Tambah</router-link>
+              <router-link v-if="$can('create outlets')" :to="{ name: 'outlets.add' }" class="btn btn-primary btn-sm btn-flat">Tambah</router-link>
               <div class="pull-right">
                   <input type="text" class="form-control" placeholder="Cari..." v-model="search">
               </div>
@@ -48,6 +48,12 @@ export default {
   created() {
       //SEBELUM COMPONENT DI-LOAD, REQUEST DATA DARI SERVER
       this.getOutlets()
+      this.middlewareRouter('edit outlets').then((res) => {
+        if (res){
+            this.fields.push({ key: 'actions', label: 'Aksi' });
+        }
+      })
+
   },
   data() {
       return {
@@ -59,7 +65,6 @@ export default {
               { key: 'address', label: 'Alamat' },
               { key: 'phone', label: 'Telp' },
               { key: 'status', label: 'Status' },
-              { key: 'actions', label: 'Aksi' }
           ],
           search: ''
       }
@@ -68,6 +73,9 @@ export default {
       //MENGAMBIL DATA OUTLETS DARI STATE OUTLETS
       ...mapState('outlet', {
           outlets: state => state.outlets
+      }),
+      ...mapState('user', {
+          authenticated: state => state.authenticated
       }),
       page: {
           get() {
@@ -95,6 +103,7 @@ export default {
   methods: {
       //MENGAMBIL FUNGSI DARI VUEX MODULE outlet
       ...mapActions('outlet', ['getOutlets', 'removeOutlet']),
+      ...mapActions('user', ['middlewareRouter']), 
       //KETIKA TOMBOL HAPUS DICLICK, MAKA AKAN MENJALANKAN METHOD INI
       deleteOutlet(id) {
           //AKAN MENAMPILKAN JENDELA KONFIRMASI

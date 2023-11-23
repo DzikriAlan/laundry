@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <div class="panel">
             <div class="panel-heading">
-                <router-link :to="{ name: 'couriers.add' }" class="btn btn-primary btn-sm btn-flat">Tambah</router-link>
+                <router-link v-if="$can('create couriers')" :to="{ name: 'couriers.add' }" class="btn btn-primary btn-sm btn-flat">Tambah</router-link>
                 <div class="pull-right">
                     <input type="text" class="form-control" placeholder="Cari..." v-model="search">
                 </div>
@@ -54,6 +54,11 @@ export default {
     name: 'DataCourier',
     created() {
         this.getCouriers() //KETIKA PAGE DI-LOAD, FUNGSI UNTUK MENGAMBIL DATA DIJALANKAN
+        this.middlewareRouter('edit couriers').then((res) => {
+            if (res){
+                this.fields.push({ key: 'actions', label: 'Aksi' });
+            }
+        })
     },
     data() {
         return {
@@ -63,7 +68,6 @@ export default {
                 { key: 'name', label: 'Nama Lengkap' },
                 { key: 'email', label: 'Email' },
                 { key: 'outlet_id', label: 'Outlet' },
-                { key: 'actions', label: 'Aksi' }
             ],
             search: ''
         }
@@ -94,6 +98,7 @@ export default {
     },
     methods: {
         ...mapActions('courier', ['getCouriers', 'removeCourier']), //MEMANGGIL FUNGSI YANG ADA DI STORE COURIER
+        ...mapActions('user', ['middlewareRouter']),
         
         //FUNGSI DELETE YANG AKAN DIBAHAS NANTINYA
         deleteCourier(id) {
