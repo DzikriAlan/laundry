@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\User;
 use App\Http\Resources\UserCollection;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Hash;
 use DB;
 use File;
 
@@ -43,7 +44,7 @@ class UserController extends Controller
             $user = User::create([ //MODIFIKASI BAGIAN INI DENGAN MEMASUKKANYA KE DALAM VARIABLE $USER
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => $request->password,
+                'password' => Hash::make($request->password),
                 'role' => $request->role,
                 'photo' => $name,
                 'outlet_id' => $request->outlet_id,
@@ -78,7 +79,7 @@ class UserController extends Controller
         try {
             $user = User::find($id); //MENGAMBIL DATA YANG AKAN DI UBAH
             //JIKA FORM PASSWORD TIDAK DI KOSONGKAN, MAKA PASSWORD AKAN DIPERBAHARUI
-            $password = $request->password != '' ? bcrypt($request->password):$user->password;
+            $password = $request->password != '' ? Hash::make($request->password):$user->password;
             $filename = $user->photo; //NAMA FILE FOTO SEBELUMNYA
 
             //JIKA ADA FILE BARU YANG DIKIRIMKAN
@@ -112,23 +113,23 @@ class UserController extends Controller
         return response()->json(['status' => 'success']);
     }
 
-        public function userLists()
-        {
-            $user = User::where('role', '!=', 3)->get();
-            return new UserCollection($user);
-        }
+    public function userLists()
+    {
+        $user = User::where('role', '!=', 3)->get();
+        return new UserCollection($user);
+    }
 
-        public function getUserLogin()
-        {
-            $user = request()->user(); //MENGAMBIL USER YANG SEDANG LOGIN
-            $permissions = [];
-            foreach (Permission::all() as $permission) {
-                //JIKA USER YANG SEDANG LOGIN PUNYA PERMISSION TERKAIT
-                if (request()->user()->can($permission->name)) {
-                    $permissions[] = $permission->name; //MAKA PERMISSION TERSEBUT DITAMBAHKAN
-                }
+    public function getUserLogin()
+    {
+        $user = request()->user(); //MENGAMBIL USER YANG SEDANG LOGIN
+        $permissions = [];
+        foreach (Permission::all() as $permission) {
+            //JIKA USER YANG SEDANG LOGIN PUNYA PERMISSION TERKAIT
+            if (request()->user()->can($permission->name)) {
+                $permissions[] = $permission->name; //MAKA PERMISSION TERSEBUT DITAMBAHKAN
             }
-            $user['permission'] = $permissions; //PERMISSION YANG DIMILIKI DIMASUKKAN KE DALAM DATA USER.
-            return response()->json(['status' => 'success', 'data' => $user]);
         }
+        $user['permission'] = $permissions; //PERMISSION YANG DIMILIKI DIMASUKKAN KE DALAM DATA USER.
+        return response()->json(['status' => 'success', 'data' => $user]);
+    }
 }
