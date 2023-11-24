@@ -40,4 +40,6 @@ Route::group(['middleware' => 'auth:api'], function() {
 
   Route::post('expenses/accept', 'API\ExpensesController@accept')->name('expenses.accept');
   Route::post('expenses/cancel', 'API\ExpensesController@cancelRequest')->name('expenses.cancel');
+
+  Route::resource('customer', 'API\CustomerController')->except(['create', 'show']);
 });

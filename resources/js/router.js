@@ -29,6 +29,11 @@ import CreateExpenses from './pages/expenses/Add.vue'
 import ViewExpenses from './pages/expenses/View.vue'
 import EditExpenses from './pages/expenses/Edit.vue'
 
+import IndexCustomer from './pages/customers/Index.vue'
+import DataCustomer from './pages/customers/Customer.vue'
+import AddCustomer from './pages/customers/Add.vue'
+import EditCustomer from './pages/customers/Edit.vue'
+
 Vue.use(Router)
 
 //DEFINE ROUTE
@@ -165,6 +170,31 @@ const router = new Router({
                 },
             ]
         },
+        {
+            path: '/customers',
+            component: IndexCustomer,
+            meta: { requiresAuth: true },
+            children: [
+                {
+                    path: '',
+                    name: 'customers.data',
+                    component: DataCustomer,
+                    meta: { title: 'Manage Customers', permissions: 'read customers'}
+                },
+                {
+                    path: 'add',
+                    name: 'customers.add',
+                    component: AddCustomer,
+                    meta: { title: 'Add New Customers', permissions: 'create customers'}
+                },
+                {
+                    path: 'edit/:id',
+                    name: 'customers.edit',
+                    component: EditCustomer,
+                    meta: { title: 'Edit Customer', permissions: 'edit customers'}
+                },
+            ]
+        }
     ]
 });
 
