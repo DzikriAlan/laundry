@@ -21,27 +21,23 @@ class CustomerController extends Controller
 
     public function store(Request $request)
     {
-        //BUAT VALIDASI DATA
         $this->validate($request, [
             'nik' => 'required|string|unique:customers,nik',
             'name' => 'required|string|max:150',
             'address' => 'required|string',
             'phone' => 'required|string|max:15'
         ]);
-
-        $user = $request->user(); //MENGAMBIL USER YANG SEDANG LOGIN
-        //DEFAULTNYA POINT DAN DEPOSIT 0
+    
+        $user = $request->user();
         $request->request->add([
             'point' => 0,
             'deposit' => 0
         ]);
-        //JIKA DI INPUT OLEH KURIR
         if ($user->role == 3) {
-            //MAKA ID KURIR DITAMBAHKAN
             $request->request->add(['courier_id' => $user->id]);
         }
-        Customer::create($request->all());
-        return response()->json(['status' => 'success']);
+        $customer = Customer::create($request->all()); //MODIFIKASI BAGIAN INI
+        return response()->json(['status' => 'success', 'data' => $customer]); //DAN PASSING DATANYA SEBAGAI RESPONSE
     }
 
     public function edit($id)

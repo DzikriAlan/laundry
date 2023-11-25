@@ -53,6 +53,26 @@
           />
           <p class="text-danger" v-if="errors.price">{{ errors.price[0] }}</p>
       </div>
+      <div class="row">
+    <div class="col-md-6">
+        <div class="form-group" :class="{ 'has-error': errors.service }">
+            <label for="">Lama Pengerjaan</label>
+            <input type="number" class="form-control" v-model="product.service">
+            <p class="text-danger" v-if="errors.service">{{ errors.service[0] }}</p>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group" :class="{ 'has-error': errors.service_type }">
+            <label for="">Satuan</label>
+            <select class="form-control" v-model="product.service_type">
+                <option value="">Pilih</option>
+                <option value="Hari">Hari</option>
+                <option value="Jam">Jam</option>
+            </select>
+            <p class="text-danger" v-if="errors.service_type">{{ errors.service_type[0] }}</p>
+        </div>
+    </div>
+</div>
   </div>
 </template>
 
@@ -61,33 +81,33 @@ import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
   name: 'FormCourier',
   created() {
-      this.getLaundryType() //KETIKA COMPONENT DI-LOAD MAKA METHOD INI AKAN DIJALANKAN
-      //APABILA MENGAKSESNYA DARI ROUTE EDIT
-      if (this.$route.name == 'products.edit') {
-          //MAKA FUNGSI UNTUK MENGAMBIL DATA PRODUCT BERDASARKAN ID AKAN DIJALANKAN
-          this.editProduct(this.$route.params.id).then((res) => {
-              //KEMUDIAN VARIABLE YANG ADA DI ISI DENGAN DATA DARI SERVER
-              this.product = {
-                  name: res.data.name,
-                  unit_type: res.data.unit_type,
-                  price: res.data.price,
-                  laundry_type: res.data.laundry_type_id
-              }
-          })
-      }
+    this.getLaundryType()
+    if (this.$route.name == 'products.edit') {
+        this.editProduct(this.$route.params.id).then((res) => {
+            this.product = {
+                name: res.data.name,
+                unit_type: res.data.unit_type,
+                price: res.data.price,
+                laundry_type: res.data.laundry_type_id,
+                service: res.data.service,
+                service_type: res.data.service_type
+            }
+        })
+    }
   },
   data() {
-      return {
-          //DEFINISIKAM VARIABLE
-          product: {
-              name: '',
-              unit_type: '',
-              price: '',
-              laundry_type: ''
-          },
-          laundry_type: '',
-          showForm: false //DEFAULT FORM UNTUK MENAMBAHKAN JENIS LAUNDRY ADALAH FALSE, YANG BERARTI FORM TIDAK DITAMPILKAN
-      }
+        return {
+            product: {
+                name: '',
+                unit_type: '',
+                price: '',
+                laundry_type: '',
+                service: '',
+                service_type: ''
+            },
+            laundry_type: '',
+            showForm: false
+        }
   },
   computed: {
       ...mapState(['errors']), //MEGAMBIL STATE ERROS
@@ -105,6 +125,16 @@ export default {
   },
   methods: {
       ...mapActions('product', ['getLaundryType', 'addLaundryType', 'addProductLaundry', 'editProduct', 'updateProduct']), //ME-LOAD SEMUA FUNGSI YANG ADA DI MODULE PRODUCT
+      clearForm() {
+        this.product = {
+          name: '',
+          unit_type: '',
+          price: '',
+          laundry_type: '',
+          service: '',
+          service_type: ''
+        }
+      },
       formatToRupiah(value) {
         return value.toLocaleString('id-ID');
       },
@@ -132,6 +162,7 @@ export default {
           if (this.$route.name == 'products.add') {
               //MAKA FUNGSI INI AKAN DIJALANKAN UNTUK MENAMBAHKAN PRODUCT BARU
               this.addProductLaundry(this.product).then(() => {
+                  this.clearForm() //GUNAKAN DISINI
                   //KOSONGKAN VARIABLE KETIKA BERHASIL MENYIMPAN DATA KE SERVER
                   this.product = {
                       name: '',
@@ -148,6 +179,7 @@ export default {
               Object.assign(this.product, { id: this.$route.params.id })
               //KIRIM PERMINTAAN KE SERVER UNTUK MENGUBAH DATA
               this.updateProduct(this.product).then(() => {
+                  this.clearForm() //GUNAKAN DISINI
                   //KOSONGKAN VARIABLE
                   this.product = {
                       name: '',

@@ -17,6 +17,7 @@
                     <li v-if="$can('read products')"><router-link :to="{ name: 'products.data' }">Products</router-link></li>
                     <li v-if="$can('read customers')"><router-link :to="{ name: 'customers.data' }">Customers</router-link></li>
                     <li v-if="$can('read expenses')"><router-link :to="{ name: 'expenses.data' }">Expenses</router-link></li>
+                    <li v-if="$can('read transactions')"><router-link :to="{ name: 'transactions.add' }">Transaction</router-link></li>
                     <li class="dropdown" v-if="authenticated.role == 0">
                         <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">Settings <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
@@ -24,11 +25,11 @@
                         </ul>
                     </li>
                 </ul>
-                  <form class="navbar-form navbar-left" role="search">
+                  <!-- <form class="navbar-form navbar-left" role="search">
                       <div class="form-group">
                           <input type="text" class="form-control" id="navbar-search-input" placeholder="Search">
                       </div>
-                  </form>
+                  </form> -->
               </div>
               <div class="navbar-custom-menu">
                   <ul class="nav navbar-nav">

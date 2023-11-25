@@ -18,6 +18,9 @@
                   <template slot="user_id" slot-scope="row">
                       {{ row.item.user.name }}
                   </template>
+                  <template slot="service" slot-scope="row">
+                      {{ row.item.service }} {{ row.item.service_type }}
+                  </template>
                   <template slot="actions" slot-scope="row">
                       <router-link :to="{ name: 'products.edit', params: {id: row.item.id} }" class="btn btn-warning btn-sm"><i class="fa fa-pencil"></i></router-link>
                       <button class="btn btn-danger btn-sm" @click="deleteProduct(row.item.id)"><i class="fa fa-trash"></i></button>
@@ -65,6 +68,7 @@ export default {
               { key: 'unit_type', label: 'Tipe' },
               { key: 'laundry_type', label: 'Jenis Jasa' },
               { key: 'price', label: 'Harga' },
+              { key: 'service', label: 'Lama Pengerjaan' }, 
               { key: 'user_id', label: 'Admin' },
           ],
           //VARIABLE UNTUK FORM SEARCH
