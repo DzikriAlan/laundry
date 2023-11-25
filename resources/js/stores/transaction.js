@@ -4,6 +4,7 @@ const state = () => ({
     customers: [], //UNTUK MENAMPUNG DATA CUSTOMER YANG DI-REQUEST
     products: [], //UNTUK MENAMPUNG DATA PRODUCT YANG DI-REQUEST
     transaction: [], //TAMBAHKAN STATE INI
+    list_transaction: [],
     page: 1
 })
 
@@ -21,7 +22,10 @@ const mutations = {
     },
     SET_PAGE(state, payload) {
         state.page = payload
-    }
+    },
+    ASSIGN_DATA_TRANSACTION(state, payload) {
+        state.list_transaction = payload
+    },
 }
 
 const actions = {
@@ -82,6 +86,17 @@ const actions = {
         return new Promise((resolve, reject) => {
             $axios.post(`/transaction/payment`, payload)
             .then((response) => {
+                resolve(response.data)
+            })
+        })
+    },
+    getTransactions({ commit, state }, payload) {
+        let search = typeof payload.search != 'undefined' ? payload.search:''
+        let status = typeof payload.status != 'undefined' ? payload.status:''
+        return new Promise((resolve, reject) => {
+            $axios.get(`/transaction?page=${state.page}&q=${search}&status=${status}`)
+            .then((response) => {
+                commit('ASSIGN_DATA_TRANSACTION', response.data)
                 resolve(response.data)
             })
         })
