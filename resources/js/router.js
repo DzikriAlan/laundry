@@ -221,7 +221,7 @@ const router = new Router({
                     path: 'list',
                     name: 'transactions.list',
                     component: ListTransaction,
-                    meta: { title: 'List Transaction' }
+                    meta: { title: 'List Transaction', permissions: 'list transactions' }
                 },
             ]
         }

@@ -106669,7 +106669,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _pages_customers_Edit_vue__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./pages/customers/Edit.vue */ "./resources/js/pages/customers/Edit.vue");
 /* harmony import */ var _pages_transaction_Index_vue__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./pages/transaction/Index.vue */ "./resources/js/pages/transaction/Index.vue");
 /* harmony import */ var _pages_transaction_Add_vue__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./pages/transaction/Add.vue */ "./resources/js/pages/transaction/Add.vue");
-/* harmony import */ var _pages_transaction_List_vue__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./pages/transaction/List.vue */ "./resources/js/pages/transaction/List.vue");
+/* harmony import */ var _pages_transaction_List_vue__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./pages/transaction/List.vue */ "./resources/js/pages/transaction/List.vue");
 /* harmony import */ var _pages_transaction_View_vue__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./pages/transaction/View.vue */ "./resources/js/pages/transaction/View.vue");
 //IMPORT SECTION
 
@@ -106922,9 +106922,10 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
     }, {
       path: 'list',
       name: 'transactions.list',
-      component: _pages_transaction_List_vue__WEBPACK_IMPORTED_MODULE_32__["default"],
+      component: _pages_transaction_List_vue__WEBPACK_IMPORTED_MODULE_30__["default"],
       meta: {
-        title: 'List Transaction'
+        title: 'List Transaction',
+        permissions: 'list transactions'
       }
     }]
   }]
