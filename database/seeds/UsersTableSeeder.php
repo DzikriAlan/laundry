@@ -13,12 +13,14 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        User::create([
-            'name' => 'Dzikri Alan',
-            'email' => 'admin@laundry.id',
-            'email_verified_at' => now(),
-            'password' => Hash::make('secret'),
-            'role' => 0
-        ]);
+        $user = [
+            [ 'name' => 'Dzikri Alan', 'email' => 'admin@laundry.id', 'email_verified_at' => now(), 'password' => Hash::make('password'), 'role' => 0 ],
+            [ 'name' => 'Aulia Harvy', 'email' => 'courier1@laundry.id', 'email_verified_at' => now(), 'password' => Hash::make('password'), 'role' => 3 ],
+            [ 'name' => 'Aditya Fathur', 'email' => 'courier2@laundry.id', 'email_verified_at' => now(), 'password' => Hash::make('password'), 'role' => 3 ],
+        ];
+
+        foreach($user as $row){
+            User::create($row);
+        }
     }
 }
