@@ -74,3 +74,6 @@ jalankan aplikasi laundry mu sekarang
   npm run watch
 ```
 
+```bash
+  php artisan serve
+```
