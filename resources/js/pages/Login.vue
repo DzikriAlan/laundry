@@ -3,7 +3,7 @@
   <div class="container">
       <div class="login-box">
           <div class="login-logo">
-              <router-link :to="{ name: 'home' }"><b>DW</b>Laundry</router-link>
+              <router-link :to="{ name: 'home' }"><b>Berkah</b>Laundry</router-link>
           </div>
           <div class="login-box-body">
               <p class="login-box-msg">Sign in to start your session</p>
