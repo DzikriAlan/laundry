@@ -84,6 +84,8 @@ new Vue({
                 }
             }) //REQUEST DATA YANG SEDANG LOGIN
             this.initialLister()
+        } else {
+            this.$router.push({ name: 'login' })
         }
     }
 })
